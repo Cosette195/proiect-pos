@@ -1,0 +1,39 @@
+services:
+  auth-db:
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - auth-db-data:/var/lib/mysql
+    networks:
+      - auth-net
+
+  auth-service:
+    build: ./services/auth
+    environment:
+      DB_HOST: auth-db
+      DB_PORT: 3306
+      DB_NAME: ${MARIADB_DATABASE}
+      DB_USER: root
+      DB_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      IDM_ISSUER: http://auth-service:50051
+      IDM_LISTEN: 0.0.0.0:50051
+    ports:
+      - "50051:50051"
+    depends_on:
+      - auth-db
+    restart: on-failure
+    networks:
+      - auth-net
+      - services-net
+
+volumes:
+  auth-db-data:
+
+networks:
+  auth-net:
+  services-net:

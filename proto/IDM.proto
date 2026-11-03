@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package IDM;
+
+service IDM
+{
+    rpc Auth(AuthRequest)
+        returns (AuthResponse);
+
+    rpc ListAccounts(ListRequest)
+        returns (ListResponse);
+
+    rpc CreateAccount(CreateRequest)
+        returns (CreateResponse);
+
+    rpc DeactivAccount(DeactivateRequest)
+        returns (DeactivateResponse);
+
+    rpc ActivateAccount(ActivateRequest)
+        returns (ActivateResponse);
+
+    rpc ValidToken(ValidRequest)
+        returns (ValidResponse);
+
+    rpc DelToken(DelRequest)
+        returns (DelResponse);
+}
+
+message AuthRequest
+{
+    string username = 1;
+    string password = 2;
+}
+
+message AuthResponse
+{
+    string token = 1;
+}
+
+message ListRequest
+{
+    string token = 1;
+}
+
+message ListResponse
+{
+    repeated Account accounts = 1;
+}
+
+message CreateRequest
+{
+    string token = 1;
+    string username = 2;
+    string role = 3;
+}
+
+message CreateResponse
+{
+    bool success = 1;
+}
+
+message DeactivateRequest
+{
+    string token = 1;
+    string username = 2;
+}
+
+message DeactivateResponse
+{
+    bool success = 1;
+}
+
+message ActivateRequest
+{
+    string username = 1;
+    string password = 2;
+}
+
+message ActivateResponse
+{
+    bool success = 1;
+}
+
+message ValidRequest
+{
+    string token = 1;
+}
+
+message ValidResponse
+{
+    string sub = 1;
+    string role = 2;
+}
+
+message DelRequest
+{
+    string token = 1;
+}
+
+message DelResponse
+{
+    bool success = 1;
+}
+
+message Account
+{
+    string uid = 1;
+    string username = 2;
+    string role = 3;
+    bool is_active = 4;
+}
